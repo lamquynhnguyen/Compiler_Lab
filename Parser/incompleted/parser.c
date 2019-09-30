@@ -146,7 +146,7 @@ void compileVarDecl(void)
 
 void compileSubDecls(void)
 {
-  assert("Parsing subtoutines ....");
+  assert("Parsing subroutines ....");
   // TODO
   if (lookAhead->tokenType == KW_FUNCTION)
   {
@@ -158,7 +158,7 @@ void compileSubDecls(void)
     compileProcDecl();
     compileSubDecls();
   }
-  assert("Subtoutines parsed ....");
+  assert("Subroutines parsed ....");
 }
 
 void compileFuncDecl(void)
@@ -398,8 +398,10 @@ void compileAssignSt(void)
     eat(SB_ASSIGN);
     compileExpression();
     break;
-  case KW_FUNCTION:
-    eat(KW_FUNCTION);
+  case TK_IDENT:
+    eat(TK_IDENT);
+    if (lookAhead->tokenType != SB_ASSIGN)
+      compileIndexes();
     eat(SB_ASSIGN);
     compileExpression();
   default:
@@ -643,10 +645,13 @@ void compileFactor(void)
 void compileIndexes(void)
 {
   // TODO
-  eat(SB_LSEL);
-  compileExpression();
-  eat(SB_RSEL);
-  compileIndexes();
+  if (lookAhead->tokenType == SB_LSEL)
+  {
+    eat(SB_LSEL);
+    compileExpression();
+    eat(SB_RSEL);
+    compileIndexes();
+  }
 }
 
 int compile(char *fileName)
