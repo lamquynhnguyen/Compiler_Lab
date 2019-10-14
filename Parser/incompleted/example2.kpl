@@ -1,0 +1,16 @@
+Program Example2; (* Factorial *)
+   
+Var n : Integer; (* -Integer  -> Invalid Type *)
+
+Function F (* = -> para *) (n : Integer) : Integer;  (* String  -> Invalid Basic Type *)
+  Begin
+    If n(* ; -> comparator *) = 0 Then (* - -> statement *)F := 1  Else F := N (* exit -> factor *)* F (N - 1);
+  End;
+
+Begin
+  For n := 1 To 7 Do (* exit -> term *)
+    Begin
+      Call WriteLn; (* exit -> argument *)
+      Call WriteI( F(n));
+    End;
+End.(* Factorial *)
