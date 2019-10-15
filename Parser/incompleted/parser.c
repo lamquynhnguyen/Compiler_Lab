@@ -139,9 +139,19 @@ void compileVarDecl(void)
 {
   // TODO
   eat(TK_IDENT);
+  compileVarDecls2();
   eat(SB_COLON);
   compileType();
   eat(SB_SEMICOLON);
+}
+
+void compileVarDecls2(void)
+{
+  while (lookAhead->tokenType == SB_COMMA)
+  {
+    eat(SB_COMMA);
+    eat(TK_IDENT);
+  }
 }
 
 void compileSubDecls(void)

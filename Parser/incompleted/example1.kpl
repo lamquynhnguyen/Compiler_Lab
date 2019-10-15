@@ -1,4 +1,4 @@
 Program Example1; (* Example 1 *)
-(*Var x: -Integer;*)
+Var x,y,z > Integer;
 Begin
-End (* Example 1 *)
+End. (* Example 1 *)
