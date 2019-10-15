@@ -1,0 +1,4 @@
+Program Example1; (* Example 1 *)
+(*Var x: -Integer;*)
+Begin
+End (* Example 1 *)
