@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "reader.h"
 #include "charcode.h"
@@ -18,17 +19,33 @@ extern int currentChar;
 
 extern CharCode charCodes[];
 
+int commentOneLine = 0;
+
 /***************************************************************/
 
 void skipBlank()
 {
-  while ((currentChar != EOF) && (charCodes[currentChar] == CHAR_SPACE))
+  while ((currentChar != EOF) && ((charCodes[currentChar] == CHAR_SPACE) || charCodes[currentChar] == CHAR_END_LINE))
     readChar();
 }
 
 void skipComment()
 {
   int state = 0;
+  // if (commentOneLine == 1)
+  // {
+  //   while (state < 2 && currentChar != EOF)
+  //   {
+  //     if (charCodes[currentChar] == CHAR_END_LINE)
+  //     {
+  //       state = 2;
+  //     }
+  //     readChar();
+  //   }
+  //   commentOneLine = 0;
+  // }
+  // else
+  // {
   while ((currentChar != EOF) && (state < 2))
   {
     switch (charCodes[currentChar])
@@ -39,6 +56,14 @@ void skipComment()
     case CHAR_RPAR:
       if (state == 1)
         state = 2;
+      else
+        state = 0;
+      break;
+    case CHAR_END_LINE:
+      if (commentOneLine == 1)
+      {
+        state = 2;
+      }
       else
         state = 0;
       break;
@@ -63,7 +88,9 @@ Token *readIdentKeyword(void)
          ((charCodes[currentChar] == CHAR_LETTER) || (charCodes[currentChar] == CHAR_DIGIT)))
   {
     if (count <= MAX_IDENT_LEN)
-      token->string[count++] = (char)currentChar;
+      //dont care upper or lower case for token
+      token->string[count++] = (char)toupper(currentChar);
+    // token->string[count++] = (char)currentChar;
     readChar();
   }
 
@@ -91,6 +118,12 @@ Token *readNumber(void)
   {
     token->string[count++] = (char)currentChar;
     readChar();
+  }
+  //number too long
+  if (count > MAX_NUMBER_LEN)
+  {
+    error(ERR_NUMBERTOOLONG, lineNo, colNo);
+    return token;
   }
 
   token->string[count] = '\0';
@@ -147,6 +180,9 @@ Token *getToken(void)
   case CHAR_SPACE:
     skipBlank();
     return getToken();
+  case CHAR_END_LINE:
+    skipBlank();
+    return getToken();
   case CHAR_LETTER:
     return readIdentKeyword();
   case CHAR_DIGIT:
@@ -164,9 +200,19 @@ Token *getToken(void)
     readChar();
     return token;
   case CHAR_SLASH:
-    token = makeToken(SB_SLASH, lineNo, colNo);
     readChar();
-    return token;
+    if (charCodes[currentChar] == CHAR_SLASH)
+    {
+      commentOneLine = 1;
+      readChar();
+      skipComment();
+      return getToken();
+    }
+    else
+    {
+      token = makeToken(SB_SLASH, lineNo, colNo);
+      return token;
+    }
   case CHAR_LT:
     ln = lineNo;
     cn = colNo;

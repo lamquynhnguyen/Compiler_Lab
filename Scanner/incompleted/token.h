@@ -8,6 +8,8 @@
 #define __TOKEN_H__
 
 #define MAX_IDENT_LEN 15
+//number too long
+#define MAX_NUMBER_LEN 10
 #define KEYWORDS_COUNT 20
 
 typedef enum {
