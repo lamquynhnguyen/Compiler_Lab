@@ -1,0 +1,18 @@
+Program Example3; 
+   
+Var n : Integer;
+    i : Integer;
+    S : Integer;
+
+Begin
+  n := ReadI;
+  S := 0;
+  i := 1;
+  While i <= n Do
+    Begin
+      S := S + i;
+      i := i + 1;
+    End;
+  Call WriteI(S);
+  Call WriteLN;
+End. 

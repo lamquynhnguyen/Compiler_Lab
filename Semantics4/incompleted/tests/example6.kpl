@@ -21,7 +21,12 @@ Program Example6;
 	v3 := 'a';
         v1 := f(c3,v3);
      end;
-
+  (* procedure hihi;
+     var hehe : Integer;
+     begin
+	hehe := v2(.1.)(.1.)(.1.);
+     end;*)
 Begin
+     
      call p(c1);
 End.
